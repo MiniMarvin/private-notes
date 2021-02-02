@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:private_notes/components/buttons/custom_text_button.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,35 +12,43 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Private Notes',
       theme: ThemeData(
-          // Define the default brightness and colors.
-          // brightness: Brightness.dark,
-          // primaryColor: Color.fromRGBO(0xfb, 0x2f, 0x91, 1),
-          primaryColor: Color.fromRGBO(0xfd, 0xfd, 0xfd, 1),
-          accentColor: Color.fromARGB(0xfc, 0xd9, 0xea, 1),
+        // Define the default brightness and colors.
+        // brightness: Brightness.dark,
+        // primaryColor: Color.fromRGBO(0xfb, 0x2f, 0x91, 1),
+        primaryColor: Color.fromRGBO(0xfd, 0xfd, 0xfd, 1),
+        accentColor: Color.fromARGB(0xfc, 0xd9, 0xea, 1),
 
-          // Define the default font family.
-          fontFamily: 'Open Sans',
+        // Define the default font family.
+        fontFamily: 'Open Sans',
 
-          // Define the default TextTheme. Use this to specify the default
-          // text styling for headlines, titles, bodies of text, and more.
-          textTheme: TextTheme(
-              headline1: TextStyle(
-                  fontSize: 72.0,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Open Sans'),
-              headline6: TextStyle(
-                  fontSize: 36.0,
-                  fontStyle: FontStyle.italic,
-                  fontFamily: 'Open Sans'),
-              bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Open Sans'),
-              button: TextStyle(fontFamily: 'Open Sans', color: Colors.white)),
-          buttonColor: Color.fromRGBO(0xfb, 0x2f, 0x91, 1),
-          buttonTheme: ButtonThemeData(
-              buttonColor: Color.fromRGBO(0xfb, 0x2f, 0x91, 1),
-              padding: EdgeInsets.all(15),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              textTheme: ButtonTextTheme.primary)),
+        // Define the default TextTheme. Use this to specify the default
+        // text styling for headlines, titles, bodies of text, and more.
+        textTheme: TextTheme(
+          headline1: TextStyle(
+            fontSize: 72.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Open Sans',
+          ),
+          headline6: TextStyle(
+            fontSize: 36.0,
+            fontStyle: FontStyle.italic,
+            fontFamily: 'Open Sans',
+          ),
+          bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Open Sans'),
+          button: TextStyle(
+            fontFamily: 'Open Sans',
+            color: Colors.white,
+          ),
+        ),
+        buttonColor: Color.fromRGBO(0xfb, 0x2f, 0x91, 1),
+        buttonTheme: ButtonThemeData(
+            buttonColor: Color.fromRGBO(0xfb, 0x2f, 0x91, 1),
+            padding: EdgeInsets.all(15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            textTheme: ButtonTextTheme.primary),
+      ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
       debugShowCheckedModeBanner: false,
     );
@@ -97,9 +106,14 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: Text('123'),
             ),
-            TextButton(onPressed: () {
-              debugPrint('teste 123');
-            }, child: Text('fazendo um teste'))
+            CustomTextButton(
+              action: () {
+                debugPrint('clicou no botão 2');
+              },
+              actionText: 'clique aqui',
+              leftText: 'para uma melhor experiência ',
+              rightText: '.',
+            ),
           ],
         ),
       ),
