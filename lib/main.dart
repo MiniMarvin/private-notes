@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/buttons/custom_text_button.dart';
+import 'package:private_notes/screens/login_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,13 +26,13 @@ class MyApp extends StatelessWidget {
         // text styling for headlines, titles, bodies of text, and more.
         textTheme: TextTheme(
           headline1: TextStyle(
-            fontSize: 72.0,
+            // fontSize: 72.0,
             fontWeight: FontWeight.bold,
             fontFamily: 'Open Sans',
           ),
           headline6: TextStyle(
-            fontSize: 36.0,
-            fontStyle: FontStyle.italic,
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
             fontFamily: 'Open Sans',
           ),
           bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Open Sans'),
@@ -49,7 +50,8 @@ class MyApp extends StatelessWidget {
             ),
             textTheme: ButtonTextTheme.primary),
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -74,14 +76,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              '1',
               style: Theme.of(context).textTheme.headline4,
             ),
             RaisedButton(

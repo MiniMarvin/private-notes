@@ -9,8 +9,8 @@ class CustomTextButton extends StatefulWidget {
   CustomTextButton({
     @required this.action,
     @required this.actionText,
-    this.leftText,
-    this.rightText,
+    this.leftText = '',
+    this.rightText = '',
   });
 
   @override
