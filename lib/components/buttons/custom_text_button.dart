@@ -53,20 +53,24 @@ class CustomTextButtonState extends State<CustomTextButton> {
       child: AnimatedOpacity(
         opacity: this.opacity,
         duration: this.duration,
-        child: RichText(
-          text: TextSpan(
-            style: DefaultTextStyle.of(context).style,
-            children: <TextSpan>[
-              TextSpan(text: this.widget.leftText),
-              TextSpan(
-                text: this.widget.actionText,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).buttonColor,
+        child: Container(
+          height: 60,
+          // width: double.infinity,
+          child: RichText(
+            text: TextSpan(
+              style: DefaultTextStyle.of(context).style,
+              children: <TextSpan>[
+                TextSpan(text: this.widget.leftText),
+                TextSpan(
+                  text: this.widget.actionText,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).buttonColor,
+                  ),
                 ),
-              ),
-              TextSpan(text: this.widget.rightText),
-            ],
+                TextSpan(text: this.widget.rightText),
+              ],
+            ),
           ),
         ),
       ),

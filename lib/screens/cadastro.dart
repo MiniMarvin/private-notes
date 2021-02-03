@@ -1,26 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/base_login_screen.dart';
-import 'package:private_notes/components/buttons/custom_text_button.dart';
-import 'package:private_notes/screens/cadastro.dart';
 
-class LoginPage extends StatefulWidget {
+class Cadastro extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _CadastroState createState() => _CadastroState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _CadastroState extends State<Cadastro> {
   final _formKey = GlobalKey<FormState>();
 
-  void _esqueciMinhaSenha() {}
-
-  void _acesse() {}
-
-  void _cadastro() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Cadastro()),
-    );
-  }
+  _cadastrar() {}
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +23,24 @@ class _LoginPageState extends State<LoginPage> {
           key: _formKey,
           child: Column(
             children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    children: [
+                      Image.asset('assets/images/addImage.png'),
+                      Padding(
+                        child: Container(
+                          child: Text(
+                            'adicione uma foto ao seu perfil',
+                            textAlign: TextAlign.center,
+                          ),
+                          width: MediaQuery.of(context).size.width * 0.5 - 60,
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.start,
+                  )),
               Padding(
                 padding: EdgeInsets.only(top: 20, bottom: 5),
                 child: Row(
@@ -86,39 +93,14 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  children: [
-                    CustomTextButton(
-                      action: _esqueciMinhaSenha,
-                      actionText: 'esqueci minha senha',
-                    ),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.start,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 20, bottom: 10),
+                padding: EdgeInsets.only(top: 50, bottom: 10),
                 child: SizedBox(
                   width: double.infinity,
                   child: RaisedButton(
-                    onPressed: _acesse,
-                    child: Text('acesse'),
+                    onPressed: _cadastrar,
+                    child: Text('cadastrar'),
                     elevation: 0,
                   ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                child: Row(
-                  children: [
-                    CustomTextButton(
-                      action: _cadastro,
-                      actionText: 'se cadastre',
-                      leftText: 'ou ',
-                    ),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.center,
                 ),
               ),
             ],
