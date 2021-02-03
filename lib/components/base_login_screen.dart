@@ -13,7 +13,7 @@ class BaseLoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
         child: ListView(
           children: <Widget>[
             Container(
