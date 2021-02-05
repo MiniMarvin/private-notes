@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/buttons/custom_text_button.dart';
 import 'package:private_notes/screens/login_page.dart';
@@ -50,15 +51,14 @@ class MyApp extends StatelessWidget {
           textTheme: ButtonTextTheme.primary,
         ),
       ),
-      // home: MyHomePage(title: 'Flutter Demo Home Page'),
       home: LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class VerifySignIn extends StatefulWidget {
+  VerifySignIn({Key key, @required this.homePage}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -69,48 +69,38 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
+  final Widget homePage;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _VerifySignInState createState() => _VerifySignInState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _VerifySignInState extends State<VerifySignIn> {
+  bool isSignedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseAuth.instance.authStateChanges().listen((User user) {
+      if (user == null) {
+        setState(() {
+          this.isSignedIn = false;
+        });
+      } else {
+        setState(() {
+          this.isSignedIn = true;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        elevation: 0,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '1',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            RaisedButton(
-              onPressed: () {
-                debugPrint('clicou');
-              },
-              child: Text('123'),
-            ),
-            CustomTextButton(
-              action: () {
-                debugPrint('clicou no botão 2');
-              },
-              actionText: 'clique aqui',
-              leftText: 'para uma melhor experiência ',
-              rightText: '.',
-            ),
-          ],
-        ),
-      ),
-    );
+    if (this.isSignedIn) {
+      return LoginPage();
+    }
+
+    return this.widget.homePage;
   }
 }
