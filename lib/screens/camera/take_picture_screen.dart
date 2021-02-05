@@ -75,15 +75,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             // Ensure that the camera is initialized.
             await _initializeControllerFuture;
 
-            // Construct the path where the image should be saved using the
-            // pattern package.
-            // final path = join(
-            //   // Store the picture in the temp directory.
-            //   // Find the temp directory using the `path_provider` plugin.
-            //   (await getTemporaryDirectory()).path,
-            //   '${DateTime.now()}.png',
-            // );
-
             // Attempt to take a picture and log where it's been saved.
             // await _controller.takePicture(path);
             final xfile = await _controller.takePicture();

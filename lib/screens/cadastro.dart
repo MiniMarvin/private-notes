@@ -37,7 +37,10 @@ class _CadastroState extends State<Cadastro> {
     this.setState(() {
       this.imageError = error;
     });
-    if (_formKey.currentState.validate()) {
+
+    bool formularioValido = _formKey.currentState.validate();
+
+    if (formularioValido && error != null && error.isNotEmpty) {
       // If the form is valid, display a snackbar. In the real world,
       // you'd often call a server or save the information in a database.
 
