@@ -10,6 +10,8 @@ class Cadastro extends StatefulWidget {
 
 class _CadastroState extends State<Cadastro> {
   final _formKey = GlobalKey<FormState>();
+  String imagePath = "";
+  String imageError;
 
   _abrirCamera() async {
     // Ensure that plugin services are initialized so that `availableCameras()`
@@ -21,6 +23,7 @@ class _CadastroState extends State<Cadastro> {
     final frontalCamera = cameras.where((camera) {
       return camera.lensDirection == CameraLensDirection.front;
     }).first;
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -29,7 +32,47 @@ class _CadastroState extends State<Cadastro> {
     );
   }
 
-  _cadastrar() {}
+  _cadastrar() {
+    String error = _validatePhoto();
+    this.setState(() {
+      this.imageError = error;
+    });
+    if (_formKey.currentState.validate()) {
+      // If the form is valid, display a snackbar. In the real world,
+      // you'd often call a server or save the information in a database.
+
+      debugPrint('validado');
+    } else {
+      debugPrint('invalidado');
+    }
+  }
+
+  String _validatePhoto() {
+    if (this.imagePath.isEmpty) {
+      return "A imagem não pode estar vazia";
+    } else {
+      return null;
+    }
+  }
+
+  Widget _buildPhotoError() {
+    if (this.imageError == null || this.imageError.isEmpty) {
+      return Container();
+    }
+    return Padding(
+      child: Container(
+        width: double.infinity,
+        child: Text(
+          this.imageError,
+          style: TextStyle(
+            color: Theme.of(context).errorColor,
+            fontSize: 12,
+          ),
+        ),
+      ),
+      padding: EdgeInsets.symmetric(vertical: 10),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,22 +104,28 @@ class _CadastroState extends State<Cadastro> {
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          children: [
-                            Image.asset('assets/images/addImage.png'),
-                            Padding(
-                              child: Container(
-                                child: Text(
-                                  'adicione uma foto ao seu perfil',
-                                  textAlign: TextAlign.center,
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: [
+                                Image.asset('assets/images/addImage.png'),
+                                Padding(
+                                  child: Container(
+                                    child: Text(
+                                      'adicione uma foto ao seu perfil',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    width: MediaQuery.of(context).size.width *
+                                            0.5 -
+                                        60,
+                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
                                 ),
-                                width: MediaQuery.of(context).size.width * 0.5 -
-                                    60,
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.start,
                             ),
+                            _buildPhotoError()
                           ],
-                          mainAxisAlignment: MainAxisAlignment.start,
                         ),
                       ),
                     ),
@@ -97,6 +146,9 @@ class _CadastroState extends State<Cadastro> {
                         hintText: 'seu@email.com',
                       ),
                       validator: (value) {
+                        if (value.isEmpty) {
+                          return 'o email não pode estar vazio';
+                        }
                         var regex = RegExp(
                           r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$",
                         );
