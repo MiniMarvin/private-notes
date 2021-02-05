@@ -1,5 +1,7 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/base_login_screen.dart';
+import 'package:private_notes/screens/camera/take_picture_screen.dart';
 
 class Cadastro extends StatefulWidget {
   @override
@@ -8,6 +10,24 @@ class Cadastro extends StatefulWidget {
 
 class _CadastroState extends State<Cadastro> {
   final _formKey = GlobalKey<FormState>();
+
+  _abrirCamera() async {
+    // Ensure that plugin services are initialized so that `availableCameras()`
+    // can be called before `runApp()`
+    WidgetsFlutterBinding.ensureInitialized();
+
+    // Obtain a list of the available cameras on the device.
+    final cameras = await availableCameras();
+    final frontalCamera = cameras.where((camera) {
+      return camera.lensDirection == CameraLensDirection.front;
+    }).first;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TakePictureScreen(camera: frontalCamera),
+      ),
+    );
+  }
 
   _cadastrar() {}
 
@@ -35,7 +55,11 @@ class _CadastroState extends State<Cadastro> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    Padding(
+                    GestureDetector(
+                      onTap: () {
+                        _abrirCamera();
+                      },
+                      child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Row(
                           children: [
@@ -53,7 +77,9 @@ class _CadastroState extends State<Cadastro> {
                             ),
                           ],
                           mainAxisAlignment: MainAxisAlignment.start,
-                        )),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(top: 20, bottom: 5),
                       child: Row(
