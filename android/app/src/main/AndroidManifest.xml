@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.private_notes">
+    package="dev.caiogomes.private_notes">
    <application
         android:label="private_notes"
         android:icon="@mipmap/ic_launcher">
