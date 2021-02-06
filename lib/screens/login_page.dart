@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/base_login_screen.dart';
 import 'package:private_notes/components/buttons/custom_text_button.dart';
 import 'package:private_notes/screens/cadastro.dart';
+import 'package:private_notes/utils/dialog.dart';
+import 'package:private_notes/utils/firebaseError.dart';
+import 'package:private_notes/utils/validators.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,15 +14,65 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool loading = false;
 
   void _esqueciMinhaSenha() {}
 
-  void _acesse() {}
+  void _acesse() {
+    bool isValid = _formKey.currentState.validate();
+    if (isValid) {
+      this.setState(() {
+        this.loading = true;
+      });
+      FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: this.emailController.value.text,
+              password: this.passwordController.value.text)
+          .then((value) {
+        debugPrint(value.toString());
+        this.setState(() {
+          this.loading = false;
+        });
+      }).catchError((Object error) {
+        this.setState(() {
+          this.loading = false;
+        });
+        debugPrint(error.toString());
+        Map<String, String> dialogContent = handleFirebaseError(error);
+        showAlertDialog(
+          dialogContent['title'],
+          dialogContent['content'],
+          () {
+            Navigator.of(context).pop();
+          },
+          context,
+        );
+      });
+    }
+  }
 
   void _cadastro() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Cadastro()),
+    );
+  }
+
+  Widget _buildLoginButton() {
+    if (this.loading == false) {
+      return RaisedButton(
+        onPressed: _acesse,
+        child: Text('acesse'),
+        elevation: 0,
+      );
+    }
+
+    return RaisedButton(
+      onPressed: () {},
+      child: CircularProgressIndicator(),
+      elevation: 0,
     );
   }
 
@@ -47,20 +101,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               TextFormField(
+                controller: emailController,
                 decoration: const InputDecoration(
                   hintText: 'seu@email.com',
                 ),
-                validator: (value) {
-                  var regex = RegExp(
-                    r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$",
-                  );
-                  final v = regex.allMatches(value).isEmpty;
-                  debugPrint(v.toString());
-                  if (regex.allMatches(value).isEmpty) {
-                    return 'email inválido';
-                  }
-                  return null;
-                },
+                validator: (value) => validateEmail(value),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 40, bottom: 5),
@@ -75,15 +120,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               TextFormField(
+                controller: passwordController,
+                obscureText: true,
                 decoration: const InputDecoration(
                   hintText: '******',
                 ),
-                validator: (value) {
-                  if (value.length < 6) {
-                    return 'A senha precisa de pelo menos 6 caracteres';
-                  }
-                  return null;
-                },
+                validator: (value) => validatePassword(value),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
@@ -101,11 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.only(top: 20, bottom: 10),
                 child: SizedBox(
                   width: double.infinity,
-                  child: RaisedButton(
-                    onPressed: _acesse,
-                    child: Text('acesse'),
-                    elevation: 0,
-                  ),
+                  child: _buildLoginButton(),
                 ),
               ),
               Padding(

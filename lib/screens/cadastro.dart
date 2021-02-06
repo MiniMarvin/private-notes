@@ -1,10 +1,12 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/base_login_screen.dart';
 import 'package:private_notes/screens/camera/take_picture_screen.dart';
 import 'dart:io';
 
 import 'package:private_notes/utils/screenUtils.dart';
+import 'package:private_notes/utils/validators.dart';
 
 class Cadastro extends StatefulWidget {
   @override
@@ -15,6 +17,9 @@ class _CadastroState extends State<Cadastro> {
   final _formKey = GlobalKey<FormState>();
   String imagePath = "";
   String imageError;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool loading = false;
 
   _abrirCamera() async {
     // Ensure that plugin services are initialized so that `availableCameras()`
@@ -53,8 +58,19 @@ class _CadastroState extends State<Cadastro> {
     if (formularioValido && error != null && error.isNotEmpty) {
       // If the form is valid, display a snackbar. In the real world,
       // you'd often call a server or save the information in a database.
-
       debugPrint('validado');
+      this.setState(() {
+        this.loading = true;
+      });
+      FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: this.emailController.value.text,
+              password: this.passwordController.value.text)
+          .then((value) {
+        this.setState(() {
+          this.loading = false;
+        });
+      });
     } else {
       debugPrint('invalidado');
     }
@@ -101,6 +117,22 @@ class _CadastroState extends State<Cadastro> {
     );
   }
 
+  Widget _buildRegisterButton() {
+    if (this.loading == false) {
+      return RaisedButton(
+        onPressed: _cadastrar,
+        child: Text('cadastrar'),
+        elevation: 0,
+      );
+    }
+
+    return RaisedButton(
+      onPressed: () {},
+      child: CircularProgressIndicator(),
+      elevation: 0,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +146,6 @@ class _CadastroState extends State<Cadastro> {
       ),
       body: GestureDetector(
         onTap: () {
-          debugPrint('tap');
           FocusScope.of(context).unfocus();
         },
         child: Padding(
@@ -173,23 +204,11 @@ class _CadastroState extends State<Cadastro> {
                       ),
                     ),
                     TextFormField(
+                      controller: emailController,
                       decoration: const InputDecoration(
                         hintText: 'seu@email.com',
                       ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'o email não pode estar vazio';
-                        }
-                        var regex = RegExp(
-                          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$",
-                        );
-                        final v = regex.allMatches(value).isEmpty;
-                        debugPrint(v.toString());
-                        if (regex.allMatches(value).isEmpty) {
-                          return 'email inválido';
-                        }
-                        return null;
-                      },
+                      validator: (value) => validateEmail(value),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 40, bottom: 5),
@@ -204,25 +223,17 @@ class _CadastroState extends State<Cadastro> {
                       ),
                     ),
                     TextFormField(
+                      controller: passwordController,
                       decoration: const InputDecoration(
                         hintText: '******',
                       ),
-                      validator: (value) {
-                        if (value.length < 6) {
-                          return 'A senha precisa de pelo menos 6 caracteres';
-                        }
-                        return null;
-                      },
+                      validator: (value) => validatePassword(value),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 50, bottom: 10),
                       child: SizedBox(
                         width: double.infinity,
-                        child: RaisedButton(
-                          onPressed: _cadastrar,
-                          child: Text('cadastrar'),
-                          elevation: 0,
-                        ),
+                        child: _buildRegisterButton(),
                       ),
                     ),
                   ],

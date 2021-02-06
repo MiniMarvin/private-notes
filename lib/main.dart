@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/buttons/custom_text_button.dart';
 import 'package:private_notes/screens/login_page.dart';
+import 'package:private_notes/security/verify_signin.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,9 +62,11 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot) {
           // Check for errors
           if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                'ocorreu um problema inicializando o aplicativo...',
+            return Scaffold(
+              body: Center(
+                child: Text(
+                  'ocorreu um problema inicializando o aplicativo...',
+                ),
               ),
             );
           }
@@ -71,61 +74,18 @@ class MyApp extends StatelessWidget {
           // Once complete, show your application
           if (snapshot.connectionState == ConnectionState.done) {
             return LoginPage();
+            // VerifySignIn(homePage: LoginPage());
           }
 
           // Otherwise, show something whilst waiting for initialization to complete
-          return Center(child: CircularProgressIndicator());
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         },
       ),
       debugShowCheckedModeBanner: false,
     );
-  }
-}
-
-class VerifySignIn extends StatefulWidget {
-  VerifySignIn({Key key, @required this.homePage}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final Widget homePage;
-
-  @override
-  _VerifySignInState createState() => _VerifySignInState();
-}
-
-class _VerifySignInState extends State<VerifySignIn> {
-  bool isSignedIn = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    FirebaseAuth.instance.authStateChanges().listen((User user) {
-      if (user == null) {
-        setState(() {
-          this.isSignedIn = false;
-        });
-      } else {
-        setState(() {
-          this.isSignedIn = true;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (this.isSignedIn) {
-      return LoginPage();
-    }
-
-    return this.widget.homePage;
   }
 }
