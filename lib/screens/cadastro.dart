@@ -2,6 +2,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/base_login_screen.dart';
 import 'package:private_notes/screens/camera/take_picture_screen.dart';
+import 'dart:io';
+
+import 'package:private_notes/utils/screenUtils.dart';
 
 class Cadastro extends StatefulWidget {
   @override
@@ -24,12 +27,19 @@ class _CadastroState extends State<Cadastro> {
       return camera.lensDirection == CameraLensDirection.front;
     }).first;
 
-    Navigator.push(
+    String imagePath = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => TakePictureScreen(camera: frontalCamera),
       ),
     );
+
+    debugPrint(imagePath);
+    if (imagePath != null && imagePath.isNotEmpty) {
+      setState(() {
+        this.imagePath = imagePath;
+      });
+    }
   }
 
   _cadastrar() {
@@ -77,6 +87,20 @@ class _CadastroState extends State<Cadastro> {
     );
   }
 
+  _buildImageSelfie() {
+    if (this.imagePath == null || this.imagePath.isEmpty) {
+      return Image.asset(
+        'assets/images/addImage.png',
+        fit: BoxFit.contain,
+      );
+    }
+
+    return Image.file(
+      File(this.imagePath),
+      fit: BoxFit.contain,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,7 +135,11 @@ class _CadastroState extends State<Cadastro> {
                           children: <Widget>[
                             Row(
                               children: [
-                                Image.asset('assets/images/addImage.png'),
+                                Container(
+                                  child: _buildImageSelfie(),
+                                  width: minSizeOfScreen(context) * 0.3,
+                                  height: minSizeOfScreen(context) * 0.3,
+                                ),
                                 Padding(
                                   child: Container(
                                     child: Text(

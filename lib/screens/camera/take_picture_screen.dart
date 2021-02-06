@@ -1,4 +1,6 @@
 // A screen that takes in a list of cameras and the Directory to store images.
+import 'dart:math';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -37,6 +39,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
     // Next, initialize the controller. This returns a Future.
     _initializeControllerFuture = _controller.initialize();
+    _initializeControllerFuture.then(
+      (value) => _controller.setFlashMode(FlashMode.off),
+    );
   }
 
   @override
@@ -46,10 +51,38 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     super.dispose();
   }
 
+  void _takePicture(context) async {
+// Take the Picture in a try / catch block. If anything goes wrong,
+    // catch the error.
+    try {
+      // Ensure that the camera is initialized.
+      await _initializeControllerFuture;
+
+      // Attempt to take a picture and log where it's been saved.
+      // await _controller.takePicture(path);
+      final xfile = await _controller.takePicture();
+
+      // If the picture was taken, display it on a new screen.
+      String imagePath = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DisplayPictureScreen(
+            imagePath: xfile.path,
+          ),
+        ),
+      );
+
+      Navigator.pop(context, imagePath);
+    } catch (e) {
+      // If an error occurs, log the error to the console.
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Take a picture')),
+      appBar: AppBar(title: Text('tirar foto')),
       // Wait until the controller is initialized before displaying the
       // camera preview. Use a FutureBuilder to display a loading spinner
       // until the controller has finished initializing.
@@ -58,7 +91,12 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             // If the Future is complete, display the preview.
-            return CameraPreview(_controller);
+            // return CameraPreview(_controller);
+            return Transform(
+              alignment: Alignment.center,
+              child: CameraPreview(_controller),
+              transform: Matrix4.rotationY(pi),
+            );
           } else {
             // Otherwise, display a loading indicator.
             return Center(child: CircularProgressIndicator());
@@ -67,30 +105,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.camera_alt),
-        // Provide an onPressed callback.
-        onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
-          try {
-            // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
-
-            // Attempt to take a picture and log where it's been saved.
-            // await _controller.takePicture(path);
-            final xfile = await _controller.takePicture();
-
-            // If the picture was taken, display it on a new screen.
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(imagePath: xfile.path),
-              ),
-            );
-          } catch (e) {
-            // If an error occurs, log the error to the console.
-            print(e);
-          }
-        },
+        backgroundColor: Theme.of(context).buttonColor,
+        foregroundColor: Colors.white,
+        onPressed: () => _takePicture(context),
       ),
     );
   }
