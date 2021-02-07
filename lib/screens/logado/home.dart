@@ -7,15 +7,16 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
+  final _titles = <Widget>[Text('tela 1'), Text('tela 2')];
   final _widgets = <Widget>[Text('tela 1'), Text('tela 2')];
   final _navigationItems = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: 'Home',
+      icon: Icon(Icons.apps),
+      label: 'público',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.business),
-      label: 'Business',
+      icon: Icon(Icons.lock),
+      label: 'restrito',
     )
   ];
 
@@ -25,11 +26,23 @@ class _HomeState extends State<Home> {
     });
   }
 
+  _openMenu() {
+    debugPrint('menu open');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BottomNavigationBar Sample'),
+        title: _titles[this._selectedIndex],
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: _openMenu,
+            color: Theme.of(context).buttonColor,
+          ),
+        ],
       ),
       body: Center(
         child: _widgets.elementAt(_selectedIndex),

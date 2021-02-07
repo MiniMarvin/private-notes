@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/base_login_screen.dart';
 import 'package:private_notes/components/buttons/custom_text_button.dart';
+import 'package:private_notes/screens/logado/home.dart';
 
 class ConfirmarConta extends StatefulWidget {
   @override
@@ -51,7 +52,13 @@ class _ConfirmarContaState extends State<ConfirmarConta> {
   }
 
   _ignoreRegistration() {
-    // Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Home(),
+      ),
+      (route) => false,
+    );
   }
 
   Widget _buildRegisterButton() {
