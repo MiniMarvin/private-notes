@@ -1,8 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/base_login_screen.dart';
 import 'package:private_notes/screens/camera/take_picture_screen.dart';
+import 'package:private_notes/screens/confirmar_conta.dart';
 import 'package:private_notes/utils/dialog.dart';
 import 'package:private_notes/utils/firebaseError.dart';
 import 'dart:io';
@@ -84,9 +86,20 @@ class _CadastroState extends State<Cadastro> {
         debugPrint('enviada a validação de email');
         final uid = FirebaseAuth.instance.currentUser.uid;
 
+        return FirebaseStorage.instance.ref(uid).putFile(File(this.imagePath));
+      }).then((imageStatus) {
+        debugPrint(imageStatus.toString());
         this.setState(() {
           this.loading = false;
         });
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ConfirmarConta(),
+          ),
+          (route) => false,
+        );
       }).catchError((Object error) {
         final errorData = handleFirebaseError(error);
         showAlertDialog(
