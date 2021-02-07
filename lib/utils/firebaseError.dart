@@ -53,7 +53,11 @@ Map<String, String> handleFirebaseError(FirebaseAuthException error) {
         'title': 'proibido',
         'content': 'o login a esta conta não é permitido',
       };
-
+    case 'weak-password':
+      return {
+        'title': 'senha fraca',
+        'content': 'para sua proteção utilize uma senha mais forte',
+      };
     default:
       return {
         'title': 'ocorreu uma situação inesperada',

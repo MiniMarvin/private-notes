@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/base_login_screen.dart';
 import 'package:private_notes/screens/camera/take_picture_screen.dart';
+import 'package:private_notes/utils/dialog.dart';
+import 'package:private_notes/utils/firebaseError.dart';
 import 'dart:io';
 
 import 'package:private_notes/utils/screenUtils.dart';
@@ -55,7 +57,10 @@ class _CadastroState extends State<Cadastro> {
 
     bool formularioValido = _formKey.currentState.validate();
 
-    if (formularioValido && error != null && error.isNotEmpty) {
+    debugPrint(error);
+    debugPrint(formularioValido.toString());
+
+    if (formularioValido && (error == null || error.isEmpty)) {
       // If the form is valid, display a snackbar. In the real world,
       // you'd often call a server or save the information in a database.
       debugPrint('validado');
@@ -63,13 +68,35 @@ class _CadastroState extends State<Cadastro> {
         this.loading = true;
       });
       FirebaseAuth.instance
-          .signInWithEmailAndPassword(
+          .createUserWithEmailAndPassword(
               email: this.emailController.value.text,
               password: this.passwordController.value.text)
           .then((value) {
+        debugPrint(value.toString());
+        return FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: this.emailController.value.text,
+          password: this.passwordController.value.text,
+        );
+      }).then((signInStatus) {
+        debugPrint(signInStatus.toString());
+        return FirebaseAuth.instance.currentUser.sendEmailVerification();
+      }).then((status) {
+        debugPrint('enviada a validação de email');
+        final uid = FirebaseAuth.instance.currentUser.uid;
+
         this.setState(() {
           this.loading = false;
         });
+      }).catchError((Object error) {
+        final errorData = handleFirebaseError(error);
+        showAlertDialog(
+          errorData['title'],
+          errorData['content'],
+          () {
+            Navigator.of(context).pop();
+          },
+          context,
+        );
       });
     } else {
       debugPrint('invalidado');
@@ -224,6 +251,7 @@ class _CadastroState extends State<Cadastro> {
                     ),
                     TextFormField(
                       controller: passwordController,
+                      obscureText: true,
                       decoration: const InputDecoration(
                         hintText: '******',
                       ),
