@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:private_notes/components/base_login_screen.dart';
 import 'package:private_notes/components/buttons/custom_text_button.dart';
 import 'package:private_notes/screens/cadastro.dart';
+import 'package:private_notes/screens/logado/home.dart';
 import 'package:private_notes/utils/dialog.dart';
 import 'package:private_notes/utils/firebaseError.dart';
 import 'package:private_notes/utils/validators.dart';
@@ -18,7 +19,9 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
   bool loading = false;
 
-  void _esqueciMinhaSenha() {}
+  void _esqueciMinhaSenha() {
+    // TODO: enviar para uma página de esqueci minha senha
+  }
 
   void _acesse() {
     bool isValid = _formKey.currentState.validate();
@@ -35,6 +38,12 @@ class _LoginPageState extends State<LoginPage> {
         this.setState(() {
           this.loading = false;
         });
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+          (route) => false,
+        );
       }).catchError((Object error) {
         this.setState(() {
           this.loading = false;

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/buttons/custom_text_button.dart';
+import 'package:private_notes/screens/logado/home.dart';
 import 'package:private_notes/screens/login_page.dart';
 import 'package:private_notes/security/verify_signin.dart';
 
@@ -73,8 +74,8 @@ class MyApp extends StatelessWidget {
 
           // Once complete, show your application
           if (snapshot.connectionState == ConnectionState.done) {
-            return LoginPage();
-            // VerifySignIn(homePage: LoginPage());
+            // return LoginPage();
+            return VerifySignIn(homePage: Home());
           }
 
           // Otherwise, show something whilst waiting for initialization to complete
