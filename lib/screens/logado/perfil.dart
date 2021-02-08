@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/firebase_storage_image.dart';
+import 'package:private_notes/screens/logado/editar_perfil.dart';
 
 class Perfil extends StatefulWidget {
   @override
@@ -22,6 +23,17 @@ class _PerfilState extends State<Perfil> {
 
   _uid() {
     return FirebaseAuth.instance.currentUser.uid;
+  }
+
+  _editar() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditarPerfil(),
+      ),
+    );
+    FirebaseAuth.instance.currentUser.reload();
+    setState(() {});
   }
 
   @override
@@ -69,6 +81,14 @@ class _PerfilState extends State<Perfil> {
               padding: EdgeInsets.only(top: 5),
               child: Text(
                 _nome(),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 30),
+              child: RaisedButton(
+                onPressed: () => _editar(),
+                child: Text('editar'),
+                elevation: 0,
               ),
             ),
           ],

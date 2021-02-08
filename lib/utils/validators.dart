@@ -19,3 +19,10 @@ validatePassword(value) {
   }
   return null;
 }
+
+validateName(String value) {
+  if (value == null || value.trim().length < 3) {
+    return 'O nome precisa de no mínimo 3 letras';
+  }
+  return null;
+}

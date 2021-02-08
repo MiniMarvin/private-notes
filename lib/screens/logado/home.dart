@@ -31,17 +31,15 @@ class _HomeState extends State<Home> {
     });
   }
 
-  _openMenu() {
-    debugPrint('menu open');
-  }
-
-  _openProfile() {
-    Navigator.push(
+  _openProfile() async {
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => Perfil(),
       ),
     );
+
+    FirebaseAuth.instance.currentUser.reload();
   }
 
   _logout() {
