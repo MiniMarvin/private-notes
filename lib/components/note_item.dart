@@ -21,10 +21,12 @@ class NoteItem extends StatelessWidget {
               'titulo',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
+            Container(height: 10),
             Text(
               content,
             )
           ],
+          crossAxisAlignment: CrossAxisAlignment.start,
         ),
       ),
       decoration: BoxDecoration(

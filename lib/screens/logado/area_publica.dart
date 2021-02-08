@@ -9,6 +9,9 @@ class AreaPublica extends StatefulWidget {
 class _AreaPublicaState extends State<AreaPublica> {
   @override
   Widget build(BuildContext context) {
-    return NoteGrid();
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: NoteGrid(),
+    );
   }
 }
