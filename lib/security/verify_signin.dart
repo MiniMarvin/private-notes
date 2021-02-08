@@ -26,18 +26,6 @@ class _VerifySignInState extends State<VerifySignIn> {
   @override
   void initState() {
     super.initState();
-
-    // FirebaseAuth.instance.authStateChanges().listen((User user) {
-    //   if (user == null) {
-    //     setState(() {
-    //       this.isSignedIn = false;
-    //     });
-    //   } else {
-    //     setState(() {
-    //       this.isSignedIn = true;
-    //     });
-    //   }
-    // });
     isSignedIn = FirebaseAuth.instance.currentUser == null;
   }
 
