@@ -40,7 +40,7 @@ class _PerfilState extends State<Perfil> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil'),
+        title: Text('perfil'),
         elevation: 0,
       ),
       body: Padding(

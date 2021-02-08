@@ -108,7 +108,7 @@ class _EditarPerfilState extends State<EditarPerfil> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('EditarPerfil'),
+        title: Text('editar perfil'),
         elevation: 0,
       ),
       body: Padding(
