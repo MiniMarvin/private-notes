@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:private_notes/components/buttons/custom_text_button.dart';
 import 'package:private_notes/components/firebase_storage_image.dart';
+import 'package:private_notes/screens/logado/area_publica.dart';
 import 'package:private_notes/screens/logado/perfil.dart';
 import 'package:private_notes/screens/login_page.dart';
 
@@ -12,8 +13,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
-  final _titles = <Widget>[Text('tela 1'), Text('tela 2')];
-  final _widgets = <Widget>[Text('tela 1'), Text('tela 2')];
+  final _titles = <Widget>[Text('área pública'), Text('tela 2')];
+  final _widgets = <Widget>[AreaPublica(), Text('tela 2')];
   final _navigationItems = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
       icon: Icon(Icons.apps),
